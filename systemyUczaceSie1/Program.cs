@@ -14,7 +14,10 @@ namespace systemyUczaceSie1
             //List<Dictionary<int, int>> listOfOccursInCols = CountOccurencesInColumn(file.Columns);
             //Dictionary<int, Dictionary<int, int>> countedInLastCol = countInLastCol(file.Columns);
             //var lastColEntropy2 = GetEntropy(file.Columns.Last());
-            var infoFunction = InfoFunction(file.Columns, 2); 
+            //var infoFunction = Helpers.InfoFunction(file.Columns, 1);
+            //var infoFunction2 = file.GetColInfoFunction(1);
+
+            var gainOf1 = Helpers.GainFunction(file.Columns, 0);
 
             Console.WriteLine("Hello World!");
             Console.ReadKey();
@@ -90,7 +93,6 @@ namespace systemyUczaceSie1
 
             return dict;
         }
-
         static Dictionary<int, Dictionary<int, int>> CountInLastColForColumn(List<List<int>> columns, int colIndex)
         {
             List<int> lastColumn = columns.Last();
@@ -162,72 +164,7 @@ namespace systemyUczaceSie1
                 }
             }
             return dict;
-        }
-
-        static List<Dictionary<int, int>> CountOccurencesInColumns(List<List<int>> columns)
-        {
-            List<Dictionary<int, int>> listOfOccursInCols = new List<Dictionary<int, int>>();
-            foreach (var column in columns)
-            {
-                Dictionary<int, int> occurTimes = new Dictionary<int, int>();
-
-                foreach (var item in column)
-                {
-                    if (occurTimes.Keys.Contains(item))
-                    {
-                        occurTimes[item] += 1;
-                    }
-                    else
-                    {
-                        occurTimes.Add(item, 1);
-                    }
-                }
-                listOfOccursInCols.Add(occurTimes);
-            }
-            return listOfOccursInCols;
-        }
+        }        
         
-        static double GetEntropy(List<int> list)
-        {
-            var numOfOccursInCol = CountOccurencesInColumns(new List<List<int>>() { list }).First();
-            double entropyTotal = 0;
-
-            foreach (var item in numOfOccursInCol)
-            {
-                double p = (double)item.Value / numOfOccursInCol.Values.Sum();
-                var entropy = (p * Math.Log(p, 2));
-                entropyTotal += entropy;
-            }
-            entropyTotal *= -1;
-            return entropyTotal;
-        }
-
-        static double InfoFunction(List<List<int>> matrix, int colIndex) // liczy funkcje informacji dla podanego atrybutu (kolumny)
-        {
-            var selectedCol = matrix[colIndex];
-            var numOfOccursInCol = CountOccurencesInColumns(new List<List<int>>() { selectedCol }).First();
-            var t = numOfOccursInCol.Values.Sum(); // liczba wszystkich elementów w wierszu
-            double infoFunctionValue = 0;
-
-            foreach (var Tx in numOfOccursInCol.Keys)
-            {
-                var lastColumnNumsForTxIndexes = new List<int>();
-                for (int i = 0; i < matrix.Last().Count; i++)
-                {
-                    var lastCol = matrix.Last();
-                    if (selectedCol[i] == Tx)
-                    {
-                        lastColumnNumsForTxIndexes.Add(lastCol[i]);
-                    }
-                }
-
-                var entropy = GetEntropy(lastColumnNumsForTxIndexes);
-
-                infoFunctionValue += ((double)numOfOccursInCol[Tx] / t) * entropy;
-            }
-
-
-            return infoFunctionValue;
-        }
     }
 }

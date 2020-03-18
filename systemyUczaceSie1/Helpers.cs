@@ -25,5 +25,56 @@ namespace systemyUczaceSie1
             
             return occurTimes;
         }
+        public static double GetEntropy(List<int> list) // Info(T)
+        {
+            var numOfOccursInCol = CountOccurencesInColumn(list);
+            double entropyTotal = 0;
+
+            foreach (var item in numOfOccursInCol)
+            {
+                double p = (double)item.Value / numOfOccursInCol.Values.Sum();
+                var entropy = (p * Math.Log(p, 2));
+                entropyTotal += entropy;
+            }
+            entropyTotal *= -1;
+            return entropyTotal;
+        }
+
+        public static double InfoFunction(List<List<int>> colMatrix, int colIndex) // liczy funkcje informacji dla podanego atrybutu (kolumny) - Info(x,T)
+        {
+            var selectedCol = colMatrix[colIndex];
+            var numOfOccursInCol = Helpers.CountOccurencesInColumn(selectedCol);
+            var t = numOfOccursInCol.Values.Sum(); // liczba wszystkich elementów w wierszu
+            double infoFunctionValue = 0;
+
+            foreach (var Tx in numOfOccursInCol.Keys)
+            {
+                var lastColumnNumsForTxIndexes = new List<int>();
+                for (int i = 0; i < colMatrix.Last().Count; i++)
+                {
+                    var lastCol = colMatrix.Last();
+                    if (selectedCol[i] == Tx)
+                    {
+                        lastColumnNumsForTxIndexes.Add(lastCol[i]);
+                    }
+                }
+
+                var entropy = GetEntropy(lastColumnNumsForTxIndexes);
+
+                infoFunctionValue += ((double)numOfOccursInCol[Tx] / t) * entropy;
+            }
+
+            return infoFunctionValue;
+        }
+
+        public static double GainFunction(List<List<int>> colMatrix, int colNum)
+        {
+            var entropy = GetEntropy(colMatrix.Last()); // Info(T)
+            var infoFunction = InfoFunction(colMatrix, colNum); // Info(X,T)
+
+            var gain = entropy - infoFunction;
+
+            return gain;
+        }
     }
 }
