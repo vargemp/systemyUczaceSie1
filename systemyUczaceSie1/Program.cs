@@ -14,9 +14,10 @@ namespace systemyUczaceSie1
             //List<Dictionary<int, int>> listOfOccursInCols = CountOccurencesInColumn(file.Columns);
             //Dictionary<int, Dictionary<int, int>> countedInLastCol = countInLastCol(file.Columns);
             //var lastColEntropy2 = GetEntropy(file.Columns.Last());
-            InfoFunction(file.Columns, 1);
+            var infoFunction = InfoFunction(file.Columns, 2); 
 
             Console.WriteLine("Hello World!");
+            Console.ReadKey();
         }
 
         static Dictionary<int, Dictionary<int, int>> CountInLastCol(List<List<int>> columns)

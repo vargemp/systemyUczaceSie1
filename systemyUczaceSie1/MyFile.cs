@@ -32,5 +32,21 @@ namespace systemyUczaceSie1
                 .ToList();
 
         }
+
+        double GetEntropy(int colIndex)
+        {
+            var desiredCol = Columns[colIndex];
+            var numOfOccursInCol = Helpers.CountOccurencesInColumn(desiredCol);
+            double entropyTotal = 0;
+
+            foreach (var item in numOfOccursInCol)
+            {
+                double p = (double)item.Value / numOfOccursInCol.Values.Sum();
+                var entropy = (p * Math.Log(p, 2));
+                entropyTotal += entropy;
+            }
+            entropyTotal *= -1;
+            return entropyTotal;
+        }
     }
 }
