@@ -33,8 +33,26 @@ namespace systemyUczaceSie1
 
         }
 
+        public int HighestGainColumn => GetHighestGainColumnNum();
         public double GetColEntropy(int colIndex) => Helpers.GetEntropy(Columns[colIndex]);
         public double GetColInfoFunction(int colIndex) => Helpers.InfoFunction(Columns, colIndex);
         public double GetRowEntropy(int rowIndex) => Helpers.GetEntropy(Rows[rowIndex]);
+        private int GetHighestGainColumnNum()
+        {
+            double bestGain = 1.0;
+            int bestGainColIndex = 0;
+            for (int i = 0; i < Columns.Count-1; i++)
+            {
+                Console.WriteLine("x");
+                var columnGain = Helpers.GainFunction(Columns, i);
+
+                if (columnGain < bestGain)
+                {
+                    bestGain = columnGain;
+                    bestGainColIndex = i;
+                }
+            }
+            return bestGainColIndex;
+        }
     }
 }

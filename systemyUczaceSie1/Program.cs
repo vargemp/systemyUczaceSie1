@@ -17,7 +17,9 @@ namespace systemyUczaceSie1
             //var infoFunction = Helpers.InfoFunction(file.Columns, 1);
             //var infoFunction2 = file.GetColInfoFunction(1);
 
-            var gainOf1 = Helpers.GainFunction(file.Columns, 0);
+            //var gainOf1 = Helpers.GainFunction(file.Columns, 0);
+
+            var x = file.HighestGainColumn;
 
             Console.WriteLine("Hello World!");
             Console.ReadKey();
