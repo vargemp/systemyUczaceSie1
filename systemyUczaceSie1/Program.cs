@@ -19,7 +19,29 @@ namespace systemyUczaceSie1
 
             //var gainOf1 = Helpers.GainFunction(file.Columns, 0);
 
-            var x = file.HighestGainColumn;
+            var lits = new List<int>() { 5,5 };
+            Console.WriteLine("Info(T): " + file.GetColEntropy(3));
+            Console.WriteLine("------------");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine($"Info(a{i}, T): {file.GetColInfoFunction(i)}");
+            }
+            Console.WriteLine("------------");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine($"Gain(a{i}, T): {file.GetColGain(i)}");
+            }
+            Console.WriteLine("------------");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine($"SplitInfo(a{i}, T): {file.GetColSplitInfo(i)}");
+            }
+            Console.WriteLine("------------");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine($"GainRatio(a{i}, T): {file.GetColGainRation(i)}");
+            }
+
 
             Console.WriteLine("Hello World!");
             Console.ReadKey();

@@ -22,7 +22,7 @@ namespace systemyUczaceSie1
                     occurTimes.Add(item, 1);
                 }
             }
-            
+
             return occurTimes;
         }
         public static double GetEntropy(List<int> list) // Info(T)
@@ -75,6 +75,16 @@ namespace systemyUczaceSie1
             var gain = entropy - infoFunction;
 
             return gain;
+        }
+
+        public static double SplitInfo(List<List<int>> colMatrix, int colNum) => GetEntropy(colMatrix[colNum]);
+
+        public static double GainRatio(List<List<int>> colMatrix, int colNum)
+        {
+            var gain = GainFunction(colMatrix, colNum);
+            var splitInfo = SplitInfo(colMatrix, colNum);
+
+            return (double)gain / splitInfo;
         }
     }
 }

@@ -37,6 +37,9 @@ namespace systemyUczaceSie1
         public double GetColEntropy(int colIndex) => Helpers.GetEntropy(Columns[colIndex]);
         public double GetColInfoFunction(int colIndex) => Helpers.InfoFunction(Columns, colIndex);
         public double GetRowEntropy(int rowIndex) => Helpers.GetEntropy(Rows[rowIndex]);
+        public double GetColGain(int colIndex) => Helpers.GainFunction(Columns, colIndex);
+        public double GetColSplitInfo(int colIndex) => Helpers.SplitInfo(Columns, colIndex);
+        public double GetColGainRation(int colIndex) => Helpers.GainRatio(Columns, colIndex);
         private int GetHighestGainColumnNum()
         {
             double bestGain = 1.0;
