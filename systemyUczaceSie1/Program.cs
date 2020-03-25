@@ -19,28 +19,34 @@ namespace systemyUczaceSie1
 
             //var gainOf1 = Helpers.GainFunction(file.Columns, 0);
 
-            var lits = new List<int>() { 5,5 };
-            Console.WriteLine("Info(T): " + file.GetColEntropy(3));
-            Console.WriteLine("------------");
-            for (int i = 0; i < 3; i++)
+            var bestAttr = file.HighestGainColumn;
+            var lastCol = file.Columns.Last();
+            Dictionary<int, List<int>> newNodes = new Dictionary<int, List<int>>();
+            List<Node> nodes = new List<Node>();
+
+            for (int i = 0; i < bestAttr.Count; i++)
             {
-                Console.WriteLine($"Info(a{i}, T): {file.GetColInfoFunction(i)}");
+                var value = bestAttr[i];
+
+                if (newNodes.Keys.Contains(value))
+                {
+                    newNodes[value].Add(lastCol[i]);
+                }
+                else
+                {
+                    newNodes.Add(value, new List<int>() { lastCol[i] });
+                }
+
+                if(nodes.Any(n => n.OriginValue == value))
+                {
+                    nodes.Single(n => n.OriginValue == value).AddValue(lastCol[i]);
+                }
+                else
+                {
+                    nodes.Add(new Node() { OriginValue = value, Values = new List<int>() { lastCol[i] } });
+                }
             }
-            Console.WriteLine("------------");
-            for (int i = 0; i < 3; i++)
-            {
-                Console.WriteLine($"Gain(a{i}, T): {file.GetColGain(i)}");
-            }
-            Console.WriteLine("------------");
-            for (int i = 0; i < 3; i++)
-            {
-                Console.WriteLine($"SplitInfo(a{i}, T): {file.GetColSplitInfo(i)}");
-            }
-            Console.WriteLine("------------");
-            for (int i = 0; i < 3; i++)
-            {
-                Console.WriteLine($"GainRatio(a{i}, T): {file.GetColGainRation(i)}");
-            }
+
 
 
             Console.WriteLine("Hello World!");

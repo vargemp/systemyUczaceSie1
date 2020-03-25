@@ -33,23 +33,48 @@ namespace systemyUczaceSie1
 
         }
 
-        public int HighestGainColumn => GetHighestGainColumnNum();
+        public int HighestGainColumnNum => GetHighestGainColumnNum();
+        public List<int> HighestGainColumn => Columns[HighestGainColumnNum];
         public double GetColEntropy(int colIndex) => Helpers.GetEntropy(Columns[colIndex]);
         public double GetColInfoFunction(int colIndex) => Helpers.InfoFunction(Columns, colIndex);
         public double GetRowEntropy(int rowIndex) => Helpers.GetEntropy(Rows[rowIndex]);
         public double GetColGain(int colIndex) => Helpers.GainFunction(Columns, colIndex);
         public double GetColSplitInfo(int colIndex) => Helpers.SplitInfo(Columns, colIndex);
         public double GetColGainRation(int colIndex) => Helpers.GainRatio(Columns, colIndex);
+
+        public void Print()
+        {
+            Console.WriteLine("------------");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine($"Info(a{i}, T): {GetColInfoFunction(i)}");
+            }
+            Console.WriteLine("------------");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine($"Gain(a{i}, T): {GetColGain(i)}");
+            }
+            Console.WriteLine("------------");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine($"SplitInfo(a{i}, T): {GetColSplitInfo(i)}");
+            }
+            Console.WriteLine("------------");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine($"GainRatio(a{i}, T): {GetColGainRation(i)}");
+            }
+            Console.WriteLine("------------");
+        }
         private int GetHighestGainColumnNum()
         {
-            double bestGain = 1.0;
+            double bestGain = 0.0;
             int bestGainColIndex = 0;
             for (int i = 0; i < Columns.Count-1; i++)
             {
-                Console.WriteLine("x");
                 var columnGain = Helpers.GainFunction(Columns, i);
 
-                if (columnGain < bestGain)
+                if (columnGain > bestGain)
                 {
                     bestGain = columnGain;
                     bestGainColIndex = i;
@@ -57,5 +82,7 @@ namespace systemyUczaceSie1
             }
             return bestGainColIndex;
         }
+
+
     }
 }
