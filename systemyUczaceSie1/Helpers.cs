@@ -87,15 +87,4 @@ namespace systemyUczaceSie1
             return (double)gain / splitInfo;
         }
     }
-
-    public class Node
-    {
-        public int OriginValue { get; set; }
-        public List<int> Values { get; set; } = new List<int>();
-
-        public void AddValue(int val)
-        {
-            Values.Add(val);
-        }
-    }
 }

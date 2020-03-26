@@ -37,18 +37,21 @@ namespace systemyUczaceSie1
                     newNodes.Add(value, new List<int>() { lastCol[i] });
                 }
 
-                if(nodes.Any(n => n.OriginValue == value))
+                if(nodes.Any(n => n.Key == value))
                 {
-                    nodes.Single(n => n.OriginValue == value).AddValue(lastCol[i]);
+                    nodes.Single(n => n.Key == value).AddValue(lastCol[i]);
                 }
                 else
                 {
-                    nodes.Add(new Node() { OriginValue = value, Values = new List<int>() { lastCol[i] } });
+                    nodes.Add(new Node() { Key = value, Values = new List<int>() { lastCol[i] } });
                 }
             }
 
-
-
+            nodes.ForEach(node =>
+            {
+                node.DoTheMagic();
+            });
+                
             Console.WriteLine("Hello World!");
             Console.ReadKey();
         }
