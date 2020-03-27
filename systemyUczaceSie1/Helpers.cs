@@ -86,5 +86,7 @@ namespace systemyUczaceSie1
 
             return ((gain == 0) && (splitInfo == 0)) ? 0 : (double)gain / splitInfo;
         }
+
+
     }
 }

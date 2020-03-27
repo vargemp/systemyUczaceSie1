@@ -18,11 +18,26 @@ namespace systemyUczaceSie1
         public double HighestGainRatioValue;
 
         public Node ParentNode;
+        public Node LeftChild { get; set; }
+        public Node RightChild { get; set; }
 
         public Node()
         {
         }
 
+        public Node(int key, List<List<int>> rows, Node parentNode)
+        {
+            Id = Guid.NewGuid();
+            Key = key;
+            SelectedRows = rows;
+            ParentNode = parentNode;
+
+            Columns = SelectedRows.SelectMany(inner => inner.Select((item, index) => new { item, index }))
+                .GroupBy(i => i.index, i => i.item)
+                .Select(g => g.ToList())
+                .ToList();
+            Values = Columns.Last();
+        }
         public Node(int key, List<int> row, Node parentNode)
         {
             Id = Guid.NewGuid();

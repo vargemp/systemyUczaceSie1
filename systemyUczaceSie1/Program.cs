@@ -28,8 +28,14 @@ namespace systemyUczaceSie1
                 }
                 else
                 {
-                    nodes.Add(new Node(value, row, new Node()));
+                    nodes.Add(new Node(value, row, null));
                 }
+
+            }
+
+            foreach (var node in nodes)
+            {
+                var nodeX = MakeTree(node);
             }
 
             nodes.ForEach(x => x.CalcHighestGainRatio());
@@ -44,6 +50,9 @@ namespace systemyUczaceSie1
                 {
                     var bestAttribute = node.HighestGainRatioColumn;
                     var lastColumn = node.Columns.Last();
+
+                    
+
                     List<Node> nextNodes = new List<Node>();
 
                     for (int i = 0; i < bestAttribute.Count; i++)
@@ -62,6 +71,7 @@ namespace systemyUczaceSie1
                         }
                     }
 
+                    nextNodes.ForEach(x => x.CalcHighestGainRatio());
                     nodes = nextNodes;
                     highestGainRatioSoFar = nodes.Max(x => x.HighestGainRatioValue);
                     Console.WriteLine($"Next iter nodes: {nodes.Count}, best gain ratio so far: {highestGainRatioSoFar}");
@@ -76,6 +86,40 @@ namespace systemyUczaceSie1
             Console.ReadKey();
         }
 
+        static Node MakeTree(Node parent)
+        {
+            parent.CalcHighestGainRatio();
+            var shouldStop = parent.HighestGainRatioValue > 0 ? false : true;
+            if (!shouldStop)
+            {
+                var groupedRows = parent.SelectedRows.GroupBy(col => col[col.Count - 1]);  // rows grouped by last col
+                if (groupedRows.Count() > 1)
+                {
+                    foreach (var group in groupedRows)
+                    {
+                        var key = group.Key;
+                        var rows = new List<List<int>>();
+                        foreach (var row in group)
+                        {
+                            rows.Add(row);
+                        }
+                        if (parent.LeftChild is null)
+                        {
+                            parent.LeftChild = MakeTree(new Node(key, rows, parent));
+                        }
+                        else
+                        {
+                            parent.RightChild = MakeTree(new Node(key, rows, parent));
+                        }
+                    }
+                }
+
+                parent.LeftChild = new Node();
+            }
+            
+
+            return parent;
+        }
         static Dictionary<int, Dictionary<int, int>> CountInLastCol(List<List<int>> columns)
         {
             List<int> lastColumn = columns.Last();
