@@ -25,7 +25,7 @@ namespace systemyUczaceSie1
             for (int i = 0; i < bestAttr.Count; i++)
             {
                 var value = bestAttr[i];
-                
+
                 var row = file.Rows[i];
                 if (nodes.Any(n => n.Key == value))
                 {
@@ -34,19 +34,20 @@ namespace systemyUczaceSie1
                 }
                 else
                 {
-                    nodes.Add(new Node(value, row ));
+                    nodes.Add(new Node(value, row));
                 }
             }
-            nodes.ForEach(x => x.CalcHighestGainRatio());
-            double highestGainRatioSoFar = nodes.Where(n => n.Values.Distinct().Count() > 1).ToList().Max(x => x.HighestGainRatioValue);
 
-            while(highestGainRatioSoFar > 0)
+            nodes.ForEach(x => x.CalcHighestGainRatio());
+            double highestGainRatioSoFar = nodes.Max(x => x.HighestGainRatioValue);
+
+            Console.WriteLine($"Starting nodes: {nodes.Count}, best gain ratio so far: {highestGainRatioSoFar}");
+
+            while (highestGainRatioSoFar > 0)
             {
                 var nodesToIterate = nodes.Where(n => n.Values.Distinct().Count() > 1).ToList();
                 foreach (var node in nodesToIterate)
                 {
-                    node.DoTheMagic();
-
                     var bestAttribute = node.HighestGainRatioColumn;
                     var lastColumn = node.Columns.Last();
                     List<Node> nextNodes = new List<Node>();
@@ -68,7 +69,8 @@ namespace systemyUczaceSie1
                     }
 
                     nodes = nextNodes;
-                    highestGainRatioSoFar = nodes.Where(n => n.Values.Distinct().Count() > 1).ToList().Max(x => x.HighestGainRatioValue);
+                    highestGainRatioSoFar = nodes.Max(x => x.HighestGainRatioValue);
+                    Console.WriteLine($"Next iter nodes: {nodes.Count}, best gain ratio so far: {highestGainRatioSoFar}");
                 };
                 
             }
