@@ -9,15 +9,9 @@ namespace systemyUczaceSie1
         static void Main(string[] args)
         {
             MyFile file = new MyFile(InputFiles.gieldaLiczby);
-
-            // liczenie wartosci wystapien atrybutu
+            
             //List<Dictionary<int, int>> listOfOccursInCols = CountOccurencesInColumn(file.Columns);
             //Dictionary<int, Dictionary<int, int>> countedInLastCol = countInLastCol(file.Columns);
-            //var lastColEntropy2 = GetEntropy(file.Columns.Last());
-            //var infoFunction = Helpers.InfoFunction(file.Columns, 1);
-            //var infoFunction2 = file.GetColInfoFunction(1);
-
-            //var gainOf1 = Helpers.GainFunction(file.Columns, 0);
             var bestAttr = file.HighestGainRatioColumn;
             var lastCol = file.Columns.Last();
             List<Node> nodes = new List<Node>();
@@ -34,7 +28,7 @@ namespace systemyUczaceSie1
                 }
                 else
                 {
-                    nodes.Add(new Node(value, row));
+                    nodes.Add(new Node(value, row, new Node()));
                 }
             }
 
@@ -64,7 +58,7 @@ namespace systemyUczaceSie1
                         }
                         else
                         {
-                            nextNodes.Add(new Node(value, row));
+                            nextNodes.Add(new Node(value, row, node));
                         }
                     }
 
@@ -78,7 +72,7 @@ namespace systemyUczaceSie1
             
                 
             // zakonczenie gdy max GainRatio = 0
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("End!");
             Console.ReadKey();
         }
 
