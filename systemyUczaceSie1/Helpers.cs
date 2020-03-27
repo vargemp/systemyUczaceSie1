@@ -84,7 +84,7 @@ namespace systemyUczaceSie1
             var gain = GainFunction(colMatrix, colNum);
             var splitInfo = SplitInfo(colMatrix, colNum);
 
-            return (double)gain / splitInfo;
+            return ((gain == 0) && (splitInfo == 0)) ? 0 : (double)gain / splitInfo;
         }
     }
 }

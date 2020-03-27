@@ -18,40 +18,64 @@ namespace systemyUczaceSie1
             //var infoFunction2 = file.GetColInfoFunction(1);
 
             //var gainOf1 = Helpers.GainFunction(file.Columns, 0);
-
-            var bestAttr = file.HighestGainColumn;
+            var bestAttr = file.HighestGainRatioColumn;
             var lastCol = file.Columns.Last();
-            Dictionary<int, List<int>> newNodes = new Dictionary<int, List<int>>();
             List<Node> nodes = new List<Node>();
 
             for (int i = 0; i < bestAttr.Count; i++)
             {
                 var value = bestAttr[i];
-
-                if (newNodes.Keys.Contains(value))
+                
+                var row = file.Rows[i];
+                if (nodes.Any(n => n.Key == value))
                 {
-                    newNodes[value].Add(lastCol[i]);
+                    var node = nodes.Single(n => n.Key == value);
+                    node.AddRow(row);
                 }
                 else
                 {
-                    newNodes.Add(value, new List<int>() { lastCol[i] });
-                }
-
-                if(nodes.Any(n => n.Key == value))
-                {
-                    nodes.Single(n => n.Key == value).AddValue(lastCol[i]);
-                }
-                else
-                {
-                    nodes.Add(new Node() { Key = value, Values = new List<int>() { lastCol[i] } });
+                    nodes.Add(new Node(value, row ));
                 }
             }
+            nodes.ForEach(x => x.CalcHighestGainRatio());
+            double highestGainRatioSoFar = nodes.Where(n => n.Values.Distinct().Count() > 1).ToList().Max(x => x.HighestGainRatioValue);
 
-            nodes.ForEach(node =>
+            while(highestGainRatioSoFar > 0)
             {
-                node.DoTheMagic();
-            });
+                var nodesToIterate = nodes.Where(n => n.Values.Distinct().Count() > 1).ToList();
+                foreach (var node in nodesToIterate)
+                {
+                    node.DoTheMagic();
+
+                    var bestAttribute = node.HighestGainRatioColumn;
+                    var lastColumn = node.Columns.Last();
+                    List<Node> nextNodes = new List<Node>();
+
+                    for (int i = 0; i < bestAttribute.Count; i++)
+                    {
+                        var value = bestAttribute[i];
+
+                        var row = node.SelectedRows[i];
+                        if (nextNodes.Any(n => n.Key == value))
+                        {
+                            var node2 = nextNodes.Single(n => n.Key == value);
+                            node2.AddRow(row);
+                        }
+                        else
+                        {
+                            nextNodes.Add(new Node(value, row));
+                        }
+                    }
+
+                    nodes = nextNodes;
+                    highestGainRatioSoFar = nodes.Where(n => n.Values.Distinct().Count() > 1).ToList().Max(x => x.HighestGainRatioValue);
+                };
                 
+            }
+
+            
+                
+            // zakonczenie gdy max GainRatio = 0
             Console.WriteLine("Hello World!");
             Console.ReadKey();
         }
