@@ -32,53 +32,16 @@ namespace systemyUczaceSie1
                 }
 
             }
-
             foreach (var node in nodes)
             {
                 var nodeX = MakeTree(node);
             }
 
-            nodes.ForEach(x => x.CalcHighestGainRatio());
-            double highestGainRatioSoFar = nodes.Max(x => x.HighestGainRatioValue);
 
-            Console.WriteLine($"Starting nodes: {nodes.Count}, best gain ratio so far: {highestGainRatioSoFar}");
-
-            while (highestGainRatioSoFar > 0)
+            foreach (var node in nodes)
             {
-                var nodesToIterate = nodes.Where(n => n.Values.Distinct().Count() > 1).ToList();
-                foreach (var node in nodesToIterate)
-                {
-                    var bestAttribute = node.HighestGainRatioColumn;
-                    var lastColumn = node.Columns.Last();
-
-                    
-
-                    List<Node> nextNodes = new List<Node>();
-
-                    for (int i = 0; i < bestAttribute.Count; i++)
-                    {
-                        var value = bestAttribute[i];
-
-                        var row = node.SelectedRows[i];
-                        if (nextNodes.Any(n => n.Key == value))
-                        {
-                            var node2 = nextNodes.Single(n => n.Key == value);
-                            node2.AddRow(row);
-                        }
-                        else
-                        {
-                            nextNodes.Add(new Node(value, row, node));
-                        }
-                    }
-
-                    nextNodes.ForEach(x => x.CalcHighestGainRatio());
-                    nodes = nextNodes;
-                    highestGainRatioSoFar = nodes.Max(x => x.HighestGainRatioValue);
-                    Console.WriteLine($"Next iter nodes: {nodes.Count}, best gain ratio so far: {highestGainRatioSoFar}");
-                };
-                
+                node.PrintPretty("", true);
             }
-
             
                 
             // zakonczenie gdy max GainRatio = 0
@@ -86,6 +49,8 @@ namespace systemyUczaceSie1
             Console.ReadKey();
         }
 
+        static int indent = 0;
+        static int topIndent = 0;
         static Node MakeTree(Node parent)
         {
             parent.CalcHighestGainRatio();
@@ -117,8 +82,29 @@ namespace systemyUczaceSie1
                 parent.LeftChild = new Node();
             }
             
-
             return parent;
+        }
+        static int marginLeft = 0;
+        static int marginTop = 0;
+        static void Print(Node node)
+        {            
+            var isTopNode = true;
+
+            if(node.ParentNode == null) //jest najwyzszym wezlem
+            {
+                Console.SetCursorPosition(0, marginTop);
+                Console.WriteLine($"NodeId: {node.Id}, leftChild: {(node.LeftChild != null ? "true" : "false")}, rightChild: {(node.RightChild != null ? "true" : "false")}");
+            }
+            else
+            {
+                isTopNode = false;
+                marginLeft += 1;
+                Console.WriteLine($"NodeId: {node.Id}, leftChild: {(node.LeftChild != null ? "true" : "false")}, rightChild: {(node.RightChild != null ? "true" : "false")}");
+            }
+            marginTop += 1;
+            if (node.LeftChild != null)
+                Print(node.LeftChild);
+
         }
         static Dictionary<int, Dictionary<int, int>> CountInLastCol(List<List<int>> columns)
         {

@@ -81,5 +81,31 @@ namespace systemyUczaceSie1
             HighestGainRatioColumn = Columns[HighestGainRatioColumnNum];
             HighestGainRatioValue = bestGainRatio;
         }
+
+        public void PrintPretty(string indent, bool last)
+        {
+            Console.Write(indent);
+            if (last)
+            {
+                Console.Write("|-");
+                indent += "  ";
+            }
+            else
+            {
+                Console.Write("|-");
+                indent += "| ";
+            }
+            Console.WriteLine(Id);
+            var children = new List<Node>();
+
+            if (LeftChild != null)
+                children.Add(LeftChild);
+
+            if (RightChild != null)
+                children.Add(RightChild);
+
+            for (int i = 0; i < children.Count; i++)
+                children[i].PrintPretty(indent, i == children.Count - 1);
+        }
     }
 }
